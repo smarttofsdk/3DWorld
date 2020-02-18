@@ -1,0 +1,145 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-05-12 18:23+0800\n"
+"PO-Revision-Date: 2018-02-27 13:43+0800\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.0.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+
+#: smartTOFViewer.py:248
+msgid "Short Range @ 4m"
+msgstr "近距离 @ 4m"
+
+#: smartTOFViewer.py:248
+msgid "Mid Range @ 8m"
+msgstr "长距离 @ 8m"
+
+#: smartTOFViewer.py:250
+msgid "Distance Color Coded"
+msgstr "深度图-彩色编码"
+
+#: smartTOFViewer.py:250
+msgid "Distance Gray Coded"
+msgstr "深度图-灰度编码"
+
+#: smartTOFViewer.py:250
+msgid "Grayscale"
+msgstr "灰度图"
+
+#: smartTOFViewer.py:250
+msgid "Grayscale HistEQ"
+msgstr "灰度图-均衡"
+
+#: smartTOFViewer.py:260
+msgid "Distance[pixel: float32, unit: m"
+msgstr ""
+
+#: smartTOFViewer.py:261 smartTOFViewer.py:263
+msgid "Distance[pixel: uint16, unit: mm"
+msgstr ""
+
+#: smartTOFViewer.py:262
+msgid "Point cloud[pixel: uint16, unit: mm"
+msgstr ""
+
+#: smartTOFViewer.py:322
+msgid "No device"
+msgstr "无设备"
+
+#: smartTOFViewer.py:342 smartTOFViewer.py:1214
+msgid "Open device failed"
+msgstr "打开设备失败"
+
+#: smartTOFViewer.py:345 smartTOFViewer.py:1254
+msgid "Device ready"
+msgstr "设备就绪"
+
+#: smartTOFViewer.py:620
+#, python-format
+msgid "(%d,%d)"
+msgstr ""
+
+#: smartTOFViewer.py:748
+msgid "Initializing..."
+msgstr "初始化中..."
+
+#: smartTOFViewer.py:749
+msgid " "
+msgstr ""
+
+#: smartTOFViewer.py:756
+msgid "Basic parameter"
+msgstr "基础参数"
+
+#: smartTOFViewer.py:772
+msgid "Start"
+msgstr "开始"
+
+#: smartTOFViewer.py:778
+msgid "Stop"
+msgstr "结束"
+
+#: smartTOFViewer.py:784
+msgid "Quit"
+msgstr "退出"
+
+#: smartTOFViewer.py:801
+msgid "Scenario"
+msgstr "场景"
+
+#: smartTOFViewer.py:812
+msgid "View type"
+msgstr "视图类型"
+
+#: smartTOFViewer.py:847
+msgid ""
+"Distance offset\n"
+" (mm)"
+msgstr "距离偏移(mm)"
+
+#: smartTOFViewer.py:872
+msgid ""
+"Range\n"
+" minimum(mm)"
+msgstr "最近距离(mm)"
+
+#: smartTOFViewer.py:885
+msgid ""
+"Range\n"
+" maximum(mm)"
+msgstr "最远距离(mm)"
+
+#: smartTOFViewer.py:898
+msgid ""
+"Integration\n"
+" time(us)"
+msgstr "积分时间(us)"
+
+#: smartTOFViewer.py:911
+msgid ""
+"Amplitude\n"
+" minimum"
+msgstr "最小幅值"
+
+#: smartTOFViewer.py:1231
+msgid "Start sampling ..."
+msgstr "开始采集..."
+
+#: smartTOFViewer.py:1235
+msgid "Start sampling failed"
+msgstr "开始采集失败"
+
+#: smartTOFViewer.py:1268
+msgid "Stop sampling failed"
+msgstr "停止采集失败"
