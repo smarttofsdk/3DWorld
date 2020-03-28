@@ -1,0 +1,62 @@
+import cv2
+import numpy as np
+import sys,os
+import math
+sys.path.append('./')
+
+# 利用opencv自带双边滤波实现滤波，空洞会被处理不适合深度相机直接用
+
+def biFil(img):
+    blur = cv2.bilateralFilter(img,5,3,34)
+    return blur
+
+# 复现论文中代码
+def my_biFil(img_dep,sigma):# img_dep unit is m
+    hgt, wid = img_dep.shape[0],img_dep.shape[1]
+    img_new = np.zeros([ 424, 512] ,dtype=np.float32)
+    kernel_size = 5
+    mov_size = int(kernel_size/2)
+    kernel_s = np.zeros([kernel_size,kernel_size], dtype = np.float32)
+    kernel_r = np.zeros([kernel_size,kernel_size], dtype = np.float32)
+    kernel = np.zeros([kernel_size,kernel_size], dtype = np.float32)
+    con_for = np.zeros([kernel_size,kernel_size], dtype = np.float32)
+    for i in range(hgt):
+        for j in range(wid):
+            if i < mov_size or j<mov_size or i >=hgt-mov_size or j>=wid-mov_size:
+                img_new[i][j]=img_dep[i][j]
+            else:
+                if img_dep[i][j] == 0 or img_dep[i][j] >= 6.5:
+                    img_new[i][j] = img_dep[i][j]
+                else:
+                    for k in range(kernel_size):
+                        for m in range(kernel_size):
+                            kernel_s[k][m] = math.exp(-(((np.square(k-mov_size))+(np.square(m-mov_size)))/(2*sigma*sigma)))
+                            con_for[k][m] = img_dep[i+k-mov_size][j+m-mov_size]
+                            if abs(img_dep[i-mov_size+k][j-mov_size+m]-img_dep[i][j])<=0.004:
+                                kernel_r[k][m] = 1
+                            else:
+                                kernel_r[k][m] = 0
+                    kernel = kernel_s*kernel_r
+                    img_new[i][j] =np.sum(kernel*con_for)/np.sum(kernel)
+    return img_new
+
+
+
+# test
+from simple_3D_viewer import *
+# fname='../data/201710101642_dep.bin'
+# background='../data/background_dep.bin'
+fname='../data/depth_cube1.bin'
+background='../data/depth_back2.bin'
+fp=open(fname,'rb')
+fp_new=open(fname,'rb')#used for reconstruction at back-end
+fp_bg=open(background,'rb')
+pc_bg,img_dep_bg=get_bg_pc(fp_new)
+img_dep_bg = img_dep_bg.copy().astype(np.float32).reshape([424,512])
+# cv2.imwrite("./tmp/cube.jpg",img_dep_bg)
+blur=biFil(img_dep_bg)
+blurr=my_biFil(img_dep_bg,3)
+cv2.imshow("dep",img_dep_bg)
+cv2.imshow("blur",blur)
+cv2.imshow("blurr",blurr)
+cv2.waitKey(0)

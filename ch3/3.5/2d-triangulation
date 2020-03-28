@@ -1,0 +1,39 @@
+##  功能描述：
+#   调用scipy库中的Delaunay函数实现点云三角剖分，并画出Voronoi图
+#   输入参数：
+#   points: 点云数组，每行为一个点坐标（x，y）
+#   输出参数：
+#   vc：3D数组中存储3个构成voroni图的相邻点的（x，y）坐标
+import numpy as np
+from scipy.spatial import Delaunay
+points = np.random.rand(50, 2)
+tri = Delaunay(points)
+p = tri.points[tri.vertices]
+# 三角剖分图形的中垂线
+A = p[:,0,:].T
+B = p[:,1,:].T
+C = p[:,2,:].T
+a = A − C
+b = B − C
+""" 为计算垂线定义的几个函数"""
+# 计算对应位相乘的函数
+def dot2(u, v):
+    return u[0]*v[0] + u[1]*v[1]
+# 计算u叉乘（v叉乘w）的函数，即ux（vxw）
+def cross2(u, v, w):
+    return dot2(u, w)*v - dot2(u, v)*w
+# 计算u叉乘v（垂直向量）的模，即||uxv||
+def ncross2(u, v):
+    return sq2(u)*sq2(v) - dot2(u, v)**2
+# 计算平方值
+def sq2(u):
+    return dot2(u, u)
+# 中垂线
+cc = cross2(sq2(a) * b - sq2(b) * a, a, b) / (2*ncross2(a, b)) + C
+# 计算 Voronoi 图的边
+vc = cc[:,tri.neighbors]  # 3D数组中存储3个相邻点的（x，y）坐标
+vc[:,tri.neighbors == -1] = np.nan   # 去除掉无穷的边界，以便后面利用plot函数显示
+lines = []  # 生成Voronoi边的线段
+lines.extend(zip(cc.T, vc[:,:,0].T))
+lines.extend(zip(cc.T, vc[:,:,1].T))
+lines.extend(zip(cc.T, vc[:,:,2].T))
