@@ -7,6 +7,6 @@
 #   sigmaSpace：坐标空间的标准方差（像素单位），相对较小
 #   输出参数：
 #   img_blur 滤波结果
-
-img_blur=cv2.bilateralFilter(src=img_dep,d=-1,sigmaColor=100, sigmaSpace 15)  
+import cv2
+img_blur=cv2.bilateralFilter(src=img_dep,d=-1,sigmaColor=100, sigmaSpace=15)
 

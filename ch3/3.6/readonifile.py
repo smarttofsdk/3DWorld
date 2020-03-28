@@ -31,8 +31,8 @@ while True:
     finfo = dmcam.frame_t()
     ret=dmcam.cap_get_frame(cam, frame_data, finfo)
     if ret>0:
-        , frame_dist = dmcam.frame_get_distance(cam, CAM_WID*CAM_ HGT, frame_data, finfo.frame_info)
-        , frame_gray = dmcam.frame_get_gray    (cam, CAM_WID*CAM_HGT, frame_data, finfo.frame_info)
+        _,frame_dist = dmcam.frame_get_distance(cam, CAM_WID*CAM_ HGT, frame_data, finfo.frame_info)
+        _,frame_gray = dmcam.frame_get_gray    (cam, CAM_WID*CAM_HGT, frame_data, finfo.frame_info)
         frame_cnt+=1
 
     else:

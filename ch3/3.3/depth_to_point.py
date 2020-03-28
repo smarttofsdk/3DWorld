@@ -29,8 +29,8 @@ def depth_to_pcloud(img_dep, tab_x, tab_y):
     pc[:, 2] = img_dep.flatten()
     return pc
 
-if __name__ == ‘__main__’:
+if __name__ == '__main__':
 	  # cam_parameter = [cx,cy,fx,fy,hgt,wid]
-	  img_dep = cv2.imread(‘The Path of your depth map’,-1)
+	  img_dep = cv2.imread('The Path of your depth map',-1)
     tab_x,tab_y = gen_tab(cx,cy,fx,fy,hgt,wid)
 	  pointcloud = depth_to_pcloud(img_dep,tab_x,tab_y)
