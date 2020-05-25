@@ -9,7 +9,11 @@
 #   img_dep:转换得到的深度图
 #   valid:深度图中有效像素点的个数
 
-def pcloud_to_depth(pc,cx,cy,kx,ky,img_hgt,img_wid):
+import numpy as np
+# 防止出现除数为零的情况
+ToF_CAM_EPS = 1.0e-16
+
+def pcloud_to_depth(pc,cx,cy,fx,fy,img_hgt,img_wid):
     # 计算点云投影到传感器的像素坐标
     x, y, z = pc[:, 0], pc[:, 1], pc[:, 2]
     kzx = z / fx
@@ -25,7 +29,7 @@ def pcloud_to_depth(pc,cx,cy,kx,ky,img_hgt,img_wid):
 
     img_dep = np.full((img_hgt, img_wid), np.inf)
     for ui, vi, zi in zip(u_valid, v_valid, z_valid):
-		# 近距离像素屏蔽远距离像素
-    img_dep[vi, ui] = min(img_dep[vi, ui], zi)  
-    valid = np.bitwise_and(~np.isinf(img_dep), img_dep > 0.0)
+        # 近距离像素屏蔽远距离像素
+        img_dep[vi, ui] = min(img_dep[vi, ui], zi)
+        valid = np.bitwise_and(~np.isinf(img_dep), img_dep > 0.0)
     return img_dep,valid
