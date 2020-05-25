@@ -6,6 +6,7 @@
 #   伪彩色图
 import cv2
 # 读取深度图
-img_dep = cv2.imread(‘depth.png’,cv2.IMREAD_UNCHANGED).astype ('float32')
+img_dep = cv2.imread("box.png", -1)
+
 # 伪彩色图转换
 img_rgb = cv2.applyColorMap(img_dep, cv2.COLORMAP_RAINBOW)
