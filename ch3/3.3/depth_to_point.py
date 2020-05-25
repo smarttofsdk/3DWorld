@@ -7,8 +7,11 @@
 
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 # 防止出现除数为零的情况
 ToF_CAM_EPS = 1.0e-16
+IMG_WID = 320
+IMG_HGT = 240
 ## 计算速算表
 # tab_x[u,v]=(u-u0)*fx
 # tab_y[u,v]=(v-v0)*fy
@@ -30,7 +33,27 @@ def depth_to_pcloud(img_dep, tab_x, tab_y):
     return pc
 
 if __name__ == '__main__':
-	  # cam_parameter = [cx,cy,fx,fy,hgt,wid]
-	  img_dep = cv2.imread('The Path of your depth map',-1)
-    tab_x,tab_y = gen_tab(cx,cy,fx,fy,hgt,wid)
-	  pointcloud = depth_to_pcloud(img_dep,tab_x,tab_y)
+    # cam_parameter = [cx,cy,fx,fy,hgt,wid]
+    img_dep = cv2.imread('box.png', 0)
+    cv2.imshow("box", img_dep)
+    tab_x,tab_y = gen_tab(160,120,180,180,240,320)
+    pointcloud = depth_to_pcloud(img_dep, tab_x, tab_y)
+    ## plt 显示
+    m4 = np.array(pointcloud)
+    # 列表解析x,y,z的坐标
+    x = [k[0] for k in m4]
+    y = [k[1] for k in m4]
+    z = [k[2] for k in m4]
+    # 开始绘图
+    fig = plt.figure(dpi=120)
+    ax = fig.add_subplot(111, projection='3d')
+    # 标题
+    plt.title('point cloud')
+    # 利用xyz的值，生成每个点的相应坐标（x,y,z）
+    ax.scatter(x, y, z, c='b', marker='.', s=2, linewidth=0, alpha=1, cmap='spectral')
+    # ax.axis('scaled')
+    ax.set_xlabel('X Label')
+    ax.set_ylabel('Y Label')
+    ax.set_zlabel('Z Label')
+    # 显示
+    plt.show()
