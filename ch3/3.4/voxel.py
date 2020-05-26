@@ -24,6 +24,7 @@ def voxel_filter(point_cloud, leaf_size):
         hx = (point_cloud[i][0] - x_min) // leaf_size
         hy = (point_cloud[i][1] - y_min) // leaf_size
         hz = (point_cloud[i][2] - z_min) // leaf_size
+        # 当前点属于第几个像素块
         h.append(hx + hy * Dx + hz * Dx * Dy)
     h = np.array(h)
 
@@ -31,15 +32,16 @@ def voxel_filter(point_cloud, leaf_size):
     h_indice = np.argsort(h)  # 返回h里面的元素按从小到大排序的索引
     h_sorted = h[h_indice]
     begin = 0
-    for i in range(len(h_sorted) - 1):  # 0~9999
+    for i in range(len(h_sorted) - 1):
         if h_sorted[i] == h_sorted[i + 1]:
             continue
         else:
+            # 体素块中心均值点
             point_idx = h_indice[begin: i + 1]
             filtered_points.append(np.mean(point_cloud[point_idx], axis=0))
             begin = i
 
-    # 把点云格式改成array，并对外返回
+    # 返回下采样后点云
     filtered_points = np.array(filtered_points, dtype=np.float64)
     return filtered_points
 
@@ -57,7 +59,7 @@ def depth_to_pcloud(img_dep, tab_x, tab_y):
     pc[:, 2] = img_dep.flatten()
     return pc
 
-## 读取点云数据
+
 # 读取深度图像
 img_dep = cv2.imread('box.png', 0)
 # 深度图转点云
