@@ -8,6 +8,7 @@
 
 import numpy as np
 import cv2
+import os
 import matplotlib.pyplot as plt
 # 防止出现除数为零的情况
 ToF_CAM_EPS = 1.0e-16
@@ -78,6 +79,28 @@ if __name__ == '__main__':
     ax.set_zlabel('Z Label')
     # 显示
     plt.show()
+    # 保存pcd文件
+    PCD_FILE_PATH = os.path.join('box.pcd')
+    if os.path.exists(PCD_FILE_PATH):
+        os.remove(PCD_FILE_PATH)
+    # 写文件句柄
+    handle = open(PCD_FILE_PATH, 'a')
+    # 得到点云点数
+    point_num = pointcloud.shape[0]
+    # pcd头部（重要）
+    handle.write(
+        '# .PCD v0.7 - Point Cloud Data file format\nVERSION 0.7\nFIELDS x y z\nSIZE 4 4 4\nTYPE F F F\nCOUNT 1 1 1')
+    string = '\nWIDTH ' + str(point_num)
+    handle.write(string)
+    handle.write('\nHEIGHT 1\nVIEWPOINT 0 0 0 1 0 0 0')
+    string = '\nPOINTS ' + str(point_num)
+    handle.write(string)
+    handle.write('\nDATA ascii')
+    # 依次写入点
+    for i in range(point_num):
+        string = '\n' + str(pointcloud[i, 0]) + ' ' + str(pointcloud[i, 1]) + ' ' + str(pointcloud[i, 2])
+        handle.write(string)
+    handle.close()
 
     ## 点云转深度图，结果与原始输入图像一致
     img_cvt = pcloud_to_depth(pointcloud, 160,120,180,180,240,320)
