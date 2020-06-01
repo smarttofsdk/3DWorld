@@ -9,10 +9,11 @@ import cv2
 #   输出参数：
 #   img_blur：滤波结果
 def depth_GaussianBlur(img_dep, win=3, sigma=0.1):
-	img_blur=cv2.GaussianBlur (img_dep,-1,(win,win), sigma)
+	img_blur=cv2.GaussianBlur (img_dep,(win,win), sigma)
 	return img_blur
 
 img_dep = cv2.imread('example_1.png', -1)
 img_dep = depth_GaussianBlur(img_dep=img_dep, win=3, sigma=0.1)
-cv.imshow("img_dep", img_dep)
+cv2.imshow("img_dep", img_dep)
+cv2.waitKey(0)
 

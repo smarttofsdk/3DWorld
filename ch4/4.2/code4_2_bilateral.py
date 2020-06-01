@@ -11,11 +11,12 @@ import cv2
 #   img_blur 滤波结果
 
 def depth_bilateralFilter(img_dep, d=-1, sigmaColor=100, sigmaSpace=15):
-	img_blur=cv2.bilateralFilter(src=img_dep, d, sigmaColor, sigmaSpace)  
+	img_blur=cv2.bilateralFilter(src=img_dep, d=d, sigmaColor=sigmaColor, sigmaSpace=sigmaSpace)
 	return img_blur
 
-img_dep = cv2.imread('example_1.png', -1)
-img_dep = depth_bilateralFilter(img_dep=img_dep, d=-1, sigmaColor=100, sigmaSpace=15
-cv.imshow("img_dep", img_dep)
+img_dep = cv2.imread('example_1.png', 0)
+img_dep = depth_bilateralFilter(img_dep=img_dep, d=-1, sigmaColor=100, sigmaSpace=15)
+cv2.imshow("img_dep", img_dep)
+cv2.waitKey(0)
 
 

@@ -8,11 +8,12 @@ import cv2
 #   输出参数：
 #   img_blur：滤波结果
 def depth_medianBlur(img_dep, win=3):
-	img_blur=cv2.medianBlur(img_dep, win)  
+	img_blur=cv2.medianBlur(img_dep, win)
 	return img_blur
 
-img_dep = cv2.imread('example_1.png', -1)
+img_dep = cv2.imread('example_1.png', 0)
 img_dep = depth_medianBlur(img_dep=img_dep, win=3)
-cv.imshow("img_dep", img_dep)
+cv2.imshow("img_dep", img_dep)
+cv2.waitKey(0)
 
 
