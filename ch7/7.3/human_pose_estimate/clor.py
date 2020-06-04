@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from filetool import *
-from tofTool import *
+# from tofTool import *
 import os
 import numpy as np
 import cv2
@@ -242,17 +242,17 @@ def label_joints_area(img_dep, bodys, wid=5, mode='0'):
     for b in bodys[0:1]:
         # for all the joints need to be labeled:
         for j in b:
-            dx, dy = b[j]
+            if j in mask_joint:
+                dx, dy = b[j]
+                if mode == 'ki2tof':
+                    dx = round((dx - 255.5) * 3.2969729e2 / 3.672420124e2 + 159.5)
+                    dy = round((dy - 211.5) * 3.2969729e2 / 3.672420124e2 + 119.5)
+                else:  # mode=='0':
+                    dx = round(dx)
+                    dy = round(dy)
 
-            if mode == 'ki2tof':
-                dx = round((dx - 255.5) * 3.2969729e2 / 3.672420124e2 + 159.5)
-                dy = round((dy - 211.5) * 3.2969729e2 / 3.672420124e2 + 119.5)
-            else:  # mode=='0':
-                dx = round(dx)
-                dy = round(dy)
-
-            mask = (img_dep[max(dy - wid, 0): dy + wid, max(dx - wid, 0): dx + wid] > 80) * j
-            cl[max(dy - wid, 0): dy + wid, max(dx - wid, 0): dx + wid] = mask
+                mask = (img_dep[max(dy - wid, 0): dy + wid, max(dx - wid, 0): dx + wid] > 80) * j
+                cl[max(dy - wid, 0): dy + wid, max(dx - wid, 0): dx + wid] = mask
 
     return np.uint8(cl)
 
@@ -319,48 +319,3 @@ def calc_contour(img_bw, gen_mask=False):
     else:
         return x_contour, y_contour
 
-
-if __name__ == '__main__':
-    # 相机位置：3 1 2
-
-    # name = 'pic6_2'
-    # # skeletonfilename = '../picData/%s/%s.skeleton'%(name,name)
-    # depthmapsfolder = '../picData/' + name + '/dep/'
-    # irfolder = '../picData/' + name + '/ir/'
-    #
-    # fn = os.listdir(depthmapsfolder)
-    # irn = os.listdir(irfolder)
-    # # bodyinfo = read_skeleton_file(skeletonfilename,1)
-
-    fd_dep = open('G:/tof/dep9.bin', 'rb')
-    fd_amp = open('G:/tof/amp9.bin', 'rb')
-    binIMG_SZ = 320 * 240
-    binIMG_SHAPE = (240, 320)
-
-    num = 0
-
-    while True:
-        # for f in range(len(fn)):
-        # img_dep = cv2.imread(depthmapsfolder + fn[f], -1).astype(np.float32)
-        # img_ir  = cv2.imread(irfolder + irn[f], -1).astype(np.float32)
-
-        img_dep = np.fromfile(fd_dep, dtype=np.float32, count=binIMG_SZ)
-        img_ir = np.fromfile(fd_amp, dtype=np.float32, count=binIMG_SZ)
-
-        if len(img_ir) < binIMG_SZ:
-            print(num)
-            break
-
-        num += 1
-
-        img_dep = (img_dep.reshape(binIMG_SHAPE) * 1000).clip(0, 65535).T[::-1]
-        img_ir = (img_ir.reshape(binIMG_SHAPE) * 16).clip(0, 65535).T[::-1]
-
-        de = (img_dep / 16).clip(0, 255).astype('uint8')
-        ir = (img_ir / 16).clip(0, 255).astype('uint8')
-
-        # cv2.putText(ir, "%d" % num, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, 255, 2, cv2.LINE_AA)
-
-        cv2.imshow('d', de)
-        cv2.imshow('r', ir)
-        cv2.waitKey(10)

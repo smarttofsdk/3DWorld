@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from clor2 import *
+from clor import *
 
 from sklearn.externals import joblib
 from sklearn.cluster import MeanShift
