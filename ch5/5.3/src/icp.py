@@ -167,6 +167,7 @@ class icp():
         # create pose values from the solution
         R = np.eye(3)
         R = R + icp.skew(v[:3])
+        R=np.array(R,dtype=np.float)
         U, S, V = np.linalg.svd(R)
         R = U.dot(V)
         t = v[3:]

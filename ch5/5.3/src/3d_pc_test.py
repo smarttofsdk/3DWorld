@@ -1,10 +1,10 @@
 import numpy as np
 import time
 import pygame
-import cv2 as cv
-
 import sys,os
 sys.path.append('./')
+sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+import cv2 as cv
 
 from pc_trans_tool import *
 from depth_cam_tools import *
@@ -16,7 +16,7 @@ from pc_optimize_tools import *
 from filter import filter
 import IO
 import mesh
-from uv_texture import *
+#from uv_texture import *
 from axis import axis
 import cal_normals
 from icp import icp
@@ -24,8 +24,8 @@ from icp import icp
 viewer=pyg_viewer_c()
 opt=optimizer()
 #####################PATH TO DATA###################
-fname='../data/201710101642_dep.bin'
-background='../data/background_dep.bin'
+fname='./data/dep_1008-0.bin'
+background='./data/dep_1008-2.bin'
 
 ###################################################
 fp=open(fname,'rb')
@@ -58,9 +58,11 @@ def run():
             normals = cal_normals.compute_feature(pc,mean_k=8)#TODO smoth the normals
             normals,pc,pc_cut= filter.remove_edge_points(pc, normals,row_threshold=0.1,col_threshold=0.02)
             pc_with_n = np.hstack((pc, normals))
-
-            Tx, R, t= icp.cal_icp(pc_with_n[:,0:3],pc_model[:,1:7],T_global)#frame to model icp
-
+            if(frame_count>0):
+                Tx, R, t= icp.cal_icp(pc_with_n[:,0:3],pc_model[:,1:7],T_global)#frame to model icp
+            else:
+                R=Tx[0:3,0:3]
+                t=Tx[0:3,3]
             pose_count+=1
             cam_pos[pose_count]=axis.update_cam_pose(cam_pos[pose_count-1],Tx)
             print('R=',R,'\n','t=',t)
