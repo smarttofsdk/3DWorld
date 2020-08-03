@@ -80,7 +80,7 @@ R_ir2rgb=np.matrix([[1.0000, 0.0016, -0.0043],
         [0.0043, -0.0114, 1.0006]])
 
 #my variable
-max_count=144#icp iterate times
+#max_count=144#icp iterate times
 T_count_interval=3 #count T every 2 frames
 register_interval=6 #mosaic new point cloud every 6 frames
 import numpy as np

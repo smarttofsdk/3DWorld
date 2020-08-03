@@ -4,6 +4,8 @@
 import sys
 import cv2
 import pygame
+import os
+#os.environ["SDL_VIDEODRIVER"] = 'windib'
 import numpy as np
 
 sys.path.append('./')
