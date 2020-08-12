@@ -23,7 +23,7 @@ delay=1.0/KINECT_FPS
 
 # 深度图处理工具
 dep_trans=depth_cam_trans_c()
-dep_trans.cam_param_k(1.0/3.787806701424671e2)
+dep_trans.cam_param_k(1.0/3.72e2)
 
 # 点云变换参数
 

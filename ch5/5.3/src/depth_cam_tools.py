@@ -114,6 +114,7 @@ class depth_cam_trans_c:
     def cam_param_k(self,k):
         self.k=k        # 像素位置(xp,yp)和物理坐标(x,y,z)的关系为：x=xp*k*z, y=yp*k*z
         self.gen_tab()  # 重新生成速算表
+        print('k=',1/k)
 
     ## 计算速算表
     #       tab_x[u,v]=(u-u0)*k
@@ -129,7 +130,7 @@ class depth_cam_trans_c:
         
         u=(np.arange(IMG_WID)-u0)*self.k
         v=(np.arange(IMG_HGT)-v0)*self.k
-        
+        print('self.k=',1/self.k)
         self.tab_x=np.tile(u,IMG_HGT)
         self.tab_y=np.repeat(v,IMG_WID)
         return

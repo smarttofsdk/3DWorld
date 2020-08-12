@@ -90,13 +90,56 @@ class filter():
     def cube_filter(img_dep,img_dep_bg,dmin=0.2,dmax=1,distance=0.2,CUT_IMG=True):
         if CUT_IMG==True:
             #img_dep = get_rect(img_dep, 100,100,200,250)#wood man
-            img_dep = filter.get_rect(img_dep, 100, 150, 200, 175)  # wood man
-            # img_dep = get_rect(img_dep,50, 50, 250, 250)#new tof
-            # img_dep = get_rect(img_dep, 150, 150, 150, 120)#cube
-            # img_dep = get_rect(img_dep, 180, 150, 80, 100)#clock
+            img_dep = filter.get_rect(img_dep, 100, 150, 300, 250)  # wood man
         mask=(img_dep > dmin) * (img_dep < dmax) * (np.abs(img_dep_bg - img_dep)>distance)
         # pc = dep_trans.depth_to_pcloud(img_dep, mask)
         return mask
+
+    @staticmethod
+    def cubic_filter(pc_input,x_min,x_max,y_min,y_max,z_min,z_max):
+        pc = pc_input #[:, 0:3]
+        idx = np.argwhere(pc[:, 0] < x_min)
+        pc = np.delete(pc, idx, axis=0)
+        idx = np.argwhere(pc[:, 0] > x_max)
+        pc = np.delete(pc, idx, axis=0)
+        idx = np.argwhere(pc[:, 1] < y_min)
+        pc = np.delete(pc, idx, axis=0)
+        idx = np.argwhere(pc[:, 1] > y_max)
+        pc = np.delete(pc, idx, axis=0)
+        idx = np.argwhere(pc[:, 2] < z_min)
+        pc = np.delete(pc, idx, axis=0)
+        idx = np.argwhere(pc[:, 2] > z_max)
+        pc = np.delete(pc, idx, axis=0)
+        return pc
+   
+    
+    @staticmethod
+    def cubic_remove(pc_input,x_min,x_max,y_min,y_max,z_min,z_max):
+        pc = pc_input #[:, 0:3]
+        p_to_remove = pc[:, 0] >= x_min
+        p_to_remove = np.logical_and(p_to_remove, pc[:, 0] <= x_max)
+        p_to_remove = np.logical_and(p_to_remove, pc[:, 1] >= y_min)
+        p_to_remove = np.logical_and(p_to_remove, pc[:, 1] <= y_max)
+        p_to_remove = np.logical_and(p_to_remove, pc[:, 2] >= z_min)
+        p_to_remove = np.logical_and(p_to_remove, pc[:, 2] <= z_max)
+        idx = np.argwhere(p_to_remove==True)
+        pc = np.delete(pc, idx, axis=0)
+        return pc
+    
+    
+    @staticmethod
+    def radius_outlier_removal(pc_input,min_num, radius):#using radius filter
+        pc = pc_input[:, 0:3]
+        kDTree = KDTree(pc, leaf_size=min_num)
+        dx, idx_knn = kDTree.query(pc[:, :], k=(min_num+1))
+        dx, idx_knn = dx[:, 1:], idx_knn[:, 1:]
+        number_less = np.sum(dx <= radius, axis=1)
+        idx = np.nonzero(number_less == min_num)
+        new_pc_fidx = np.copy(pc_input[idx])
+        return new_pc_fidx
+    
+    
+
 
     @staticmethod
     def get_rect(dep_image, start_x, start_y, width, height):  # get a rectangle of source image
